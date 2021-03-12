@@ -1,7 +1,8 @@
-# Steps to deploy oc-gate on OCP cluster
+# Steps to deploy oc-gate operator on OCP cluster
 
-## 1 - Create test dir and populate it with SSL certs:
+## 1 - Create oc-gate-operator/certs dirs and populate certs with SSL certs:
 $ mkdir -p oc-gate-operator/certs
+
 $ cd oc-gate-operator
 
 $ openssl genrsa -out certs/key.pem
