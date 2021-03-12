@@ -1,9 +1,10 @@
 # Steps to deploy oc-gate on OCP cluster
 
 ## 1 - Create test dir and populate it with SSL certs:
-$ mkdir test
+$ mkdir -p oc-gate-operator/certs
+$ cd oc-gate-operator
 
-$ openssl genrsa -out test/key.pem
+$ openssl genrsa -out certs/key.pem
 ``` bash
 Generating RSA private key, 2048 bit long modulus (2 primes)
 ..............+++++
@@ -12,7 +13,7 @@ e is 65537 (0x010001)
 $
 ```
 
-$ openssl req -new -x509 -sha256 -key test/key.pem -out test/cert.pem -days 3650
+$ openssl req -new -x509 -sha256 -key certs/key.pem -out certs/cert.pem -days 3650
 ``` bash
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
@@ -31,7 +32,7 @@ Email Address []:
 $
 ```
 
-$ ls test
+$ ls certs
 ``` bash
 cert.pem  key.pem
 $
@@ -51,10 +52,10 @@ Using project "default".
 $
 ```
 
-## 3- Create oc-gate project:
-$ oc new-project oc-gate
+## 3- Create oc-gate-operator project:
+$ oc new-project oc-gate-operator
 ``` bash
-Now using project "oc-gate" on server "https://api.xxx.xxx.lab:6443".
+Now using project "oc-gate-operator" on server "https://api.xxx.xxx.lab:6443".
 
 You can add applications to this project with the 'new-app' command. For example, try:
 
@@ -67,13 +68,13 @@ $
 ```
 
 ## 4- Create a new secret oc-gate-jwt-secret in the oc-gate project:
-$ oc create secret generic oc-gate-jwt-secret --from-file=test/cert.pem
+$ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem
 ``` bash
 secret/oc-gate-jwt-secret created
 ```
 
 ## 5- Create oc-gate template using included oc-gate-template.yaml:
-$ oc create -f oc-gate-template.yaml 
+$ oc create -f oc-gate-template.yaml
 ``` bash
 template.template.openshift.io/oc-gate created
 ```
