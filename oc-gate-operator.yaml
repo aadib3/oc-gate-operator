@@ -65,7 +65,7 @@ spec:
                 pattern: ^(http|https)://.*
                 type: string
               image:
-                default: quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
+                default: quay.io/yaacov/oc-gate
                 description: image is the oc gate proxy image to use. Defalut value is "quay.io/yaacov/oc-gate:latest".
                 maxLength: 1024
                 type: string
@@ -627,8 +627,8 @@ spec:
         - --upstream=http://127.0.0.1:8080/
         - --logtostderr=true
         - --v=10
-        image: pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac-proxy:v0.5.0
-        name: kube-rbac-proxy
+        image: kube-rbac-proxy-image
+        name: kuberbacproxy
         ports:
         - containerPort: 8443
           name: https
@@ -638,7 +638,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: quay.io/yaacov/oc-gate-operator@sha256:aa4b164d92372011e3c644651220f889671b8b4affc4b90a1c21eb4b10c84b60
+        image: ocgateoperatorimage
         livenessProbe:
           httpGet:
             path: /healthz

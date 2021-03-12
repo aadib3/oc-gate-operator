@@ -1,12 +1,21 @@
 # Steps to deploy oc-gate operator on OCP cluster
 
 ## 1- Clone oc-gate-operator git repository:
+``` bash
 $ git clone https://github.com/aadib3/oc-gate-operator.git
+Cloning into 'oc-gate-operator'...
+remote: Enumerating objects: 29, done.
+remote: Counting objects: 100% (29/29), done.
+remote: Compressing objects: 100% (18/18), done.
+remote: Total 29 (delta 8), reused 29 (delta 8), pack-reused 0
+Receiving objects: 100% (29/29), 11.93 KiB | 5.96 MiB/s, done.
+Resolving deltas: 100% (8/8), done.
+```
 
-## 1 - Create oc-gate-operator/certs dirs and populate certs with SSL certs:
-$ mkdir -p oc-gate-operator/certs
-
+## 2 - Create certs dirs in cloned dir and populate certs with SSL certs:
 $ cd oc-gate-operator
+
+$ mkdir certs
 
 $ openssl genrsa -out certs/key.pem
 ``` bash
@@ -42,7 +51,7 @@ cert.pem  key.pem
 $
 ```
 
-## 2- Login into OCP cluster to deploy oc-gate app:
+## 3- Login into OCP cluster to deploy oc-gate-operator:
 $ oc login https://api.ocp4.xxx.xxx:6443
 ``` bash
 Authentication required for https://api.ocp4.xxx.xxx:6443 (openshift)
@@ -56,22 +65,13 @@ Using project "default".
 $
 ```
 
-## 3- Create oc-gate-operator project:
-$ oc new-project oc-gate-operator
-``` bash
-Now using project "oc-gate-operator" on server "https://api.xxx.xxx.lab:6443".
+## 4- Set the following variables with the appropriate image locations:
+$ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac-proxy:v0.5.0
+$ ocgateoperatorimage=quay.io/yaacov/oc-gate-operator@sha256:aa4b164d92372011e3c644651220f889671b8b4affc4b90a1c21eb4b10c84b60
 
-You can add applications to this project with the 'new-app' command. For example, try:
-
-    oc new-app rails-postgresql-example
-
-to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
-
-    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+## 5- Inject the image variables into oc-gate-operator.yaml file and create oc-gate-operator objects:
 $
-```
-
-## 4- Create oc-gate-operator OCP objects using the oc-gate-operator.yaml file:
+$
 $ oc create -f oc-gate-operator.yaml
 ``` bash
 namespace/oc-gate-operator created
