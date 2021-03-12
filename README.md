@@ -70,8 +70,10 @@ $ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac
 $ ocgateoperatorimage=quay.io/yaacov/oc-gate-operator@sha256:aa4b164d92372011e3c644651220f889671b8b4affc4b90a1c21eb4b10c84b60
 
 ## 5- Inject the image variables into oc-gate-operator.yaml file and create oc-gate-operator objects:
-$
-$
+$ sed -i "s~kuberbacproxyimage~$kuberbacproxyimage~g" oc-gate-operator.yaml
+
+$ sed -i "s~ocgateoperatorimage~$ocgateoperatorimage~g" oc-gate-operator.yaml
+
 $ oc create -f oc-gate-operator.yaml
 ``` bash
 namespace/oc-gate-operator created
@@ -90,7 +92,7 @@ service/oc-gate-operator-controller-manager-metrics-service created
 deployment.apps/oc-gate-operator-controller-manager created
 ```
 
-## 5- View resources created in oc-gate-operator project:
+## 6- View resources created in oc-gate-operator project:
 $ oc get all -n oc-gate-operator
 ``` bash
 NAME                                                      READY   STATUS    RESTARTS   AGE
@@ -108,13 +110,7 @@ replicaset.apps/oc-gate-operator-controller-manager-566d6c44d   1         1     
 
 # Steps to authenticate access to a virtual machine noVNC console
 
-## 1- Create a new secret oc-gate-jwt-secret in the oc-gate project:
-$ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-file=certs/key.pem -n oc-gate
-``` bash
-secret/oc-gate-jwt-secret created
-```
-
-## 2- Create the following variables:
+## 1- Create the following variables:
 ``` bash
 $ vm=rhel6-150.ocp4.xxx.xxx (Replace with VM name)
 $ ns=ocs-cnv (Replace with namespace where VM resides)
@@ -122,9 +118,16 @@ $ path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/$ns/virtualmachinei
 $ ocgateroute="oc-gate.apps.ocp4.xxx.xxx" (Replace with correct route path)
 $ posturl=https://$ocgateroute/login.html
 $ postpath=/noVNC/vnc_lite.html?path=$path
-$ oc-gate-image=quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
-$ oc-gate-route=oc-gate.apps.ocp4.goldman.lab
+$ ocgateimage=quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
+$ ocgateroute=oc-gate.apps.ocp4.goldman.lab
 ```
+
+## 1- Create a new secret oc-gate-jwt-secret in the oc-gate project:
+$ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-file=certs/key.pem -n oc-gate
+``` bash
+secret/oc-gate-jwt-secret created
+```
+
 
 ## 2- Inject the oc-gate-image and oc-gate-route variables into the gateserver.yaml and create the GateServer:
 $ oc create -f gateserver.yaml
