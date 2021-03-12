@@ -627,8 +627,8 @@ spec:
         - --upstream=http://127.0.0.1:8080/
         - --logtostderr=true
         - --v=10
-        image: kube-rbac-proxy-image
-        name: kuberbacproxy
+        image: kuberbacproxyimage
+        name: kube-rbac-proxy
         ports:
         - containerPort: 8443
           name: https
