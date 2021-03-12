@@ -1,5 +1,8 @@
 # Steps to deploy oc-gate operator on OCP cluster
 
+## 1- Clone oc-gate-operator git repository:
+$ git clone https://github.com/aadib3/oc-gate-operator.git
+
 ## 1 - Create oc-gate-operator/certs dirs and populate certs with SSL certs:
 $ mkdir -p oc-gate-operator/certs
 
@@ -111,34 +114,30 @@ $ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-
 secret/oc-gate-jwt-secret created
 ```
 
-## 1- Create the following variables with virtual machine name, namespace, path, token expiry in seconds, URL for oc-gate route:
+## 2- Create the following variables:
 ``` bash
 $ vm=rhel6-150.ocp4.xxx.xxx (Replace with VM name)
 $ ns=ocs-cnv (Replace with namespace where VM resides)
 $ path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/$ns/virtualmachineinstances/$vm/vnc
-$ token_expiry=3600 (Replace with desired token duration in seconds)
-$ keyfile=/home/aadib/console-access/test/key.pem (Replace with location of where the SSL key was created)
 $ ocgateroute="oc-gate.apps.ocp4.xxx.xxx" (Replace with correct route path)
-```
-
-## 2- Set and display POST service URL:
 $ posturl=https://$ocgateroute/login.html
-
-$ echo $posturl
-``` bash
-https://oc-gate.apps.ocp4.xxx.xxx/login.html
+$ postpath=/noVNC/vnc_lite.html?path=$path
+$ oc-gate-image=quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
+$ oc-gate-route=oc-gate.apps.ocp4.goldman.lab
 ```
 
-## 3- Create and diplay JWT token signed by private SSL key:
-$ TOKEN=$(echo {\\"exp\\": $(expr $(date +%s) + $token_expiry),\\"matchPath\\":\\"^/$path\\"} | jwt -key $keyfile -alg RS256 -sign -)
-
-$ echo $TOKEN
+## 2- Inject the oc-gate-image and oc-gate-route variables into the gateserver.yaml and create the GateServer:
+$ oc create -f gateserver.yaml
 ``` bash
-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGxvd2VkQVBJUmVnZXhwIjoiXi9wYXRoIiwiZXhwIjoxNjE0ODk1NjAwfQ.j6AqKritRobMWoKjUGjnp7Khntxsr2BsXZ2-GZmb20VLBAX4r6VDzsN4VP5wBalDjYn8o0mlt7kJ4BWy81hMOLWst8TD-d3Vt6xXr0Eo8rVUnodjXP_YctO4lHT1eoizNFnook80XTsHoDgXEGm04nqoKbIB71Re-7cQFZQSfWFPjUM4Qbl32ebFqfjDI-29UoerB3M5eyonYhmLHLS9LlL_XRbaDh1XOBEDMwQ9jQMw5fLQ2P7wtmyVHkHkUqmaA9d51KKuiGQrz0mQtdiHaq_DQYkoZ9Z47eZHrlOUlcAS7IEfaw3ZSCLB9kwXExQ5X0BmYP7hqvHeQTPsd1aWVg
+gateserver.ocgate.yaacov.com/oc-gate-server created
+```
+
+$ oc create -f gatetoken.yaml
+``` bash
+gatetoken.ocgate.yaacov.com/oc-gate-token created
 ```
 
 ## 4- Set and display POST path:
-$ postpath=/noVNC/vnc_lite.html?path=$path
 
 $ echo $postpath
 ``` bash

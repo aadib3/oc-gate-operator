@@ -4,6 +4,5 @@ metadata:
   name: oc-gate-server
   namespace: oc-gate
 spec:
-  # image is optional field for disconnected clusters
-  #image: quay.io/yaacov/oc-gate:v0.0.1
-  route: oc-gate.apps.ocp4.goldman.lab
+  image: oc-gate-image
+  route: oc-gate-route

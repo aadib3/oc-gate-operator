@@ -4,6 +4,5 @@ metadata:
   name: oc-gate-token
   namespace: oc-gate
 spec:
-  #image is optional field for disconnected clusters
-  #image: quay.io/yaacov/oc-gate:v0.0.1
-  match-path: /k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/ocs-cnv/virtualmachineinstances/rhel6-150.ocp4.goldman.lab/vnc
+  image: oc-gate-image
+  match-path: /oc-gate-path
