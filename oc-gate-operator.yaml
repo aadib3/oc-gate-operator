@@ -5,6 +5,13 @@ metadata:
     control-plane: controller-manager
   name: oc-gate-operator
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: oc-gate
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -288,7 +295,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: oc-gate-operator-leader-election-role
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 rules:
 - apiGroups:
   - ""
@@ -527,7 +534,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: oc-gate-operator-leader-election-rolebinding
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -535,7 +542,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -548,7 +555,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -561,7 +568,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 ---
 apiVersion: v1
 data:
@@ -580,7 +587,7 @@ data:
 kind: ConfigMap
 metadata:
   name: oc-gate-operator-manager-config
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 ---
 apiVersion: v1
 kind: Service
@@ -588,7 +595,7 @@ metadata:
   labels:
     control-plane: controller-manager
   name: oc-gate-operator-controller-manager-metrics-service
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 spec:
   ports:
   - name: https
@@ -603,7 +610,7 @@ metadata:
   labels:
     control-plane: controller-manager
   name: oc-gate-operator-controller-manager
-  namespace: oc-gate-operator-system
+  namespace: oc-gate-operator
 spec:
   replicas: 1
   selector:

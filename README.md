@@ -68,59 +68,53 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
 $
 ```
 
-## 4- Create a new secret oc-gate-jwt-secret in the oc-gate project:
-$ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem
+## 4- Create oc-gate-operator OCP objects using the oc-gate-operator.yaml file:
+$ oc create -f oc-gate-operator.yaml
+``` bash
+namespace/oc-gate-operator created
+namespace/oc-gate created
+customresourcedefinition.apiextensions.k8s.io/gateservers.ocgate.yaacov.com created
+customresourcedefinition.apiextensions.k8s.io/gatetokens.ocgate.yaacov.com created
+role.rbac.authorization.k8s.io/oc-gate-operator-leader-election-role created
+clusterrole.rbac.authorization.k8s.io/oc-gate-operator-manager-role created
+clusterrole.rbac.authorization.k8s.io/oc-gate-operator-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/oc-gate-operator-proxy-role created
+rolebinding.rbac.authorization.k8s.io/oc-gate-operator-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/oc-gate-operator-manager-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/oc-gate-operator-proxy-rolebinding created
+configmap/oc-gate-operator-manager-config created
+service/oc-gate-operator-controller-manager-metrics-service created
+deployment.apps/oc-gate-operator-controller-manager created
+```
+
+## 5- Switch to oc-gate-operator project and view resources created:
+$ oc project oc-gate-operator
+``` bash
+Now using project "oc-gate-operator" on server "https://api.ocp4.xxx.xxx:6443".
+```
+$
+$ oc get all
+``` bash
+NAME                                                      READY   STATUS    RESTARTS   AGE
+pod/oc-gate-operator-controller-manager-566d6c44d-pmw7j   2/2     Running   0          90s
+
+NAME                                                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/oc-gate-operator-controller-manager-metrics-service   ClusterIP   172.30.85.114   <none>        8443/TCP   105s
+
+NAME                                                  READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/oc-gate-operator-controller-manager   1/1     1            1           105s
+
+NAME                                                            DESIRED   CURRENT   READY   AGE
+replicaset.apps/oc-gate-operator-controller-manager-566d6c44d   1         1         1       90s
+```
+
+# Steps to authenticate access to a virtual machine noVNC console
+
+## 1- Create a new secret oc-gate-jwt-secret in the oc-gate project:
+$ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-file=certs/key.pem -n oc-gate
 ``` bash
 secret/oc-gate-jwt-secret created
 ```
-
-## 5- Create oc-gate template using included oc-gate-template.yaml:
-$ oc create -f oc-gate-template.yaml
-``` bash
-template.template.openshift.io/oc-gate created
-```
-
-## 6- Create oc-gate OCP objects using the oc-gate template:
-$ oc process -p ROUTE_URL=oc-gate.apps.ocp4.xxx.xxx oc-gate | oc create -f -
-``` bash
-route.route.openshift.io/oc-gate created
-serviceaccount/oc-gate created
-clusterrolebinding.authorization.openshift.io/oc-gate-cluster-reader created
-service/oc-gate created
-replicationcontroller/oc-gate created
-```
-
-## 7- Verify OCP objects created and running:
-$ oc get all
-``` bash
-NAME                READY   STATUS    RESTARTS   AGE
-pod/oc-gate-rx4p4   1/1     Running   0          2m24s
-
-NAME                            DESIRED   CURRENT   READY   AGE
-replicationcontroller/oc-gate   1         1         1       2m25s
-
-NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-service/oc-gate   ClusterIP   172.30.140.240   <none>        8080/TCP   2m25s
-
-NAME                               HOST/PORT                       PATH   SERVICES   PORT   TERMINATION   WILDCARD
-route.route.openshift.io/oc-gate   oc-gate.apps.ocp4.xxx.xxx          oc-gate    8080   reencrypt     None
-```
-
-# Steps to install golang and jwt
-## 1- As root yum install golang:
-
-\# yum install golang -y
-
-
-## 2- Go get jwt executable:
-$ go get github.com/dgrijalva/jwt-go/cmd/jwt
-
-
-## 3- Add jwt to path:
-$ PATH=$PATH:~/go/bin
-
-
-# Steps to authenticate access to a virtual machine noVNC console
 
 ## 1- Create the following variables with virtual machine name, namespace, path, token expiry in seconds, URL for oc-gate route:
 ``` bash
