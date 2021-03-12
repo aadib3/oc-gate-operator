@@ -4,5 +4,5 @@ metadata:
   name: oc-gate-token
   namespace: oc-gate
 spec:
-  image: oc-gate-image
-  match-path: /oc-gate-path
+  image: ocgateimage
+  match-path: /ocgatepath

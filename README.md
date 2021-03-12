@@ -70,9 +70,7 @@ $ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac
 $ ocgateoperatorimage=quay.io/yaacov/oc-gate-operator@sha256:aa4b164d92372011e3c644651220f889671b8b4affc4b90a1c21eb4b10c84b60
 
 ## 5- Inject the image variables into oc-gate-operator.yaml file and create oc-gate-operator objects:
-$ sed -i "s|kuberbacproxyimage|$kuberbacproxyimage|g" oc-gate-operator.yaml
-
-$ sed -i "s|ocgateoperatorimage|$ocgateoperatorimage|g" oc-gate-operator.yaml
+$ sed -i "s|kuberbacproxyimage|$kuberbacproxyimage|g;s|ocgateoperatorimage|$ocgateoperatorimage|g" oc-gate-operator.yaml
 
 $ oc create -f oc-gate-operator.yaml
 ``` bash
@@ -110,42 +108,54 @@ replicaset.apps/oc-gate-operator-controller-manager-566d6c44d   1         1     
 
 # Steps to authenticate access to a virtual machine noVNC console
 
-## 1- Create the following variables:
-``` bash
-$ vm=rhel6-150.ocp4.xxx.xxx (Replace with VM name)
-$ ns=ocs-cnv (Replace with namespace where VM resides)
-$ path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/$ns/virtualmachineinstances/$vm/vnc
-$ ocgateroute="oc-gate.apps.ocp4.xxx.xxx" (Replace with correct route path)
-$ posturl=https://$ocgateroute/login.html
-$ postpath=/noVNC/vnc_lite.html?path=$path
-$ ocgateimage=quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
-$ ocgateroute=oc-gate.apps.ocp4.goldman.lab
-```
-
 ## 1- Create a new secret oc-gate-jwt-secret in the oc-gate project:
 $ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-file=certs/key.pem -n oc-gate
 ``` bash
 secret/oc-gate-jwt-secret created
 ```
+## 2- Set the following variables required for creating the operator CRs:
+``` bash
+$ ocgateimage=quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
+$ ocgateroute="oc-gate.apps.ocp4.xxx.xxx"
+$ vm=rhel6-150.ocp4.xxx.xxx 
+$ ns=ocs-cnv
+$ ocgatepath=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/$ns/virtualmachineinstances/$vm/vnc
+$ posturl=https://$ocgateroute/login.html
+$ postpath=/noVNC/vnc_lite.html?path=$path
+```
 
+## 3- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
+$ sed -i "s|ocgateimage|$ocgateimage|g;s|ocgateroute|$ocgateroute|g" gateserver.yaml
 
-## 2- Inject the oc-gate-image and oc-gate-route variables into the gateserver.yaml and create the GateServer:
 $ oc create -f gateserver.yaml
 ``` bash
 gateserver.ocgate.yaacov.com/oc-gate-server created
 ```
+
+## 4- Inject the ocgateimage and ocgatepath into gatetoken.yaml and create the GateToken custom resource:
+$ sed -i "s|ocgateimage|$ocgateimage|g;s|ocgatepath|$ocgatepath|g" gatestoken.yaml
 
 $ oc create -f gatetoken.yaml
 ``` bash
 gatetoken.ocgate.yaacov.com/oc-gate-token created
 ```
 
-## 4- Set and display POST path:
-
-$ echo $postpath
+## 4- View custom resources created in oc-gate project:
+$ oc get gateserver,gatetoken,svc,route -n oc-gate
 ``` bash
-/noVNC/vnc_lite.html?path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/ocs-cnv/virtualmachineinstances/rhel6-150.ocp4.xxx.xxx/vnc
+NAME                                          AGE
+gateserver.ocgate.yaacov.com/oc-gate-server   76m
+
+NAME                                        AGE
+gatetoken.ocgate.yaacov.com/oc-gate-token   76m
+
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/oc-gate-server   ClusterIP   172.30.93.92   <none>        8080/TCP   76m
+
+NAME                                      HOST/PORT                       PATH   SERVICES         PORT   TERMINATION   WILDCARD
+route.route.openshift.io/oc-gate-server   oc-gate.apps.ocp4.goldman.lab          oc-gate-server   8080   reencrypt     None
 ```
+
 
 ## 5- Open a web browser and enter post service URL from step 2:
 ![Screenshot from 2021-03-08 13-12-17](https://user-images.githubusercontent.com/77073889/110363740-eb460a00-8010-11eb-8e7a-256a6c42302c.png)

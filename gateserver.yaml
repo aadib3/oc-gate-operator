@@ -4,5 +4,5 @@ metadata:
   name: oc-gate-server
   namespace: oc-gate
 spec:
-  image: oc-gate-image
-  route: oc-gate-route
+  image: ocgateimage
+  route: ocgateroute
