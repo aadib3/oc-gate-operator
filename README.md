@@ -70,9 +70,9 @@ $ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac
 $ ocgateoperatorimage=quay.io/yaacov/oc-gate-operator@sha256:aa4b164d92372011e3c644651220f889671b8b4affc4b90a1c21eb4b10c84b60
 
 ## 5- Inject the image variables into oc-gate-operator.yaml file and create oc-gate-operator objects:
-$ sed -i "s~kuberbacproxyimage~$kuberbacproxyimage~g" oc-gate-operator.yaml
+$ sed -i "s|kuberbacproxyimage|$kuberbacproxyimage|g" oc-gate-operator.yaml
 
-$ sed -i "s~ocgateoperatorimage~$ocgateoperatorimage~g" oc-gate-operator.yaml
+$ sed -i "s|ocgateoperatorimage|$ocgateoperatorimage|g" oc-gate-operator.yaml
 
 $ oc create -f oc-gate-operator.yaml
 ``` bash
