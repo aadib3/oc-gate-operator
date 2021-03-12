@@ -87,25 +87,20 @@ service/oc-gate-operator-controller-manager-metrics-service created
 deployment.apps/oc-gate-operator-controller-manager created
 ```
 
-## 5- Switch to oc-gate-operator project and view resources created:
-$ oc project oc-gate-operator
-``` bash
-Now using project "oc-gate-operator" on server "https://api.ocp4.xxx.xxx:6443".
-```
-$
-$ oc get all
+## 5- View resources created in oc-gate-operator project:
+$ oc get all -n oc-gate-operator
 ``` bash
 NAME                                                      READY   STATUS    RESTARTS   AGE
-pod/oc-gate-operator-controller-manager-566d6c44d-pmw7j   2/2     Running   0          90s
+pod/oc-gate-operator-controller-manager-566d6c44d-pmw7j   2/2     Running   1          10m
 
 NAME                                                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-service/oc-gate-operator-controller-manager-metrics-service   ClusterIP   172.30.85.114   <none>        8443/TCP   105s
+service/oc-gate-operator-controller-manager-metrics-service   ClusterIP   172.30.85.114   <none>        8443/TCP   10m
 
 NAME                                                  READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/oc-gate-operator-controller-manager   1/1     1            1           105s
+deployment.apps/oc-gate-operator-controller-manager   1/1     1            1           10m
 
 NAME                                                            DESIRED   CURRENT   READY   AGE
-replicaset.apps/oc-gate-operator-controller-manager-566d6c44d   1         1         1       90s
+replicaset.apps/oc-gate-operator-controller-manager-566d6c44d   1         1         1       10m
 ```
 
 # Steps to authenticate access to a virtual machine noVNC console
