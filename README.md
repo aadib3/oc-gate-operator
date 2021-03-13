@@ -67,6 +67,7 @@ $
 
 ## 4- Set the following variables with the appropriate image locations:
 $ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac-proxy:v0.5.0
+
 $ ocgateoperatorimage=quay.io/yaacov/oc-gate-operator@sha256:aa4b164d92372011e3c644651220f889671b8b4affc4b90a1c21eb4b10c84b60
 
 ## 5- Inject the image variables into oc-gate-operator.yaml file and create oc-gate-operator objects:
@@ -121,7 +122,7 @@ $ vm=rhel6-150.ocp4.xxx.xxx
 $ ns=ocs-cnv
 $ ocgatepath=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/$ns/virtualmachineinstances/$vm/vnc
 $ posturl=https://$ocgateroute/login.html
-$ postpath=/noVNC/vnc_lite.html?path=$path
+$ postpath=/noVNC/vnc_lite.html?path=$ocgatepath
 ```
 
 ## 3- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
@@ -133,14 +134,14 @@ gateserver.ocgate.yaacov.com/oc-gate-server created
 ```
 
 ## 4- Inject the ocgateimage and ocgatepath into gatetoken.yaml and create the GateToken custom resource:
-$ sed -i "s|ocgateimage|$ocgateimage|g;s|ocgatepath|$ocgatepath|g" gatestoken.yaml
+$ sed -i "s|ocgateimage|$ocgateimage|g;s|ocgatepath|$ocgatepath|g" gatetoken.yaml
 
 $ oc create -f gatetoken.yaml
 ``` bash
 gatetoken.ocgate.yaacov.com/oc-gate-token created
 ```
 
-## 4- View custom resources created in oc-gate project:
+## 5- View custom resources created in oc-gate project:
 $ oc get gateserver,gatetoken,svc,route -n oc-gate
 ``` bash
 NAME                                          AGE
@@ -153,11 +154,23 @@ NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
 service/oc-gate-server   ClusterIP   172.30.93.92   <none>        8080/TCP   76m
 
 NAME                                      HOST/PORT                       PATH   SERVICES         PORT   TERMINATION   WILDCARD
-route.route.openshift.io/oc-gate-server   oc-gate.apps.ocp4.goldman.lab          oc-gate-server   8080   reencrypt     None
+route.route.openshift.io/oc-gate-server   oc-gate.apps.ocp4.xxx.xxx          oc-gate-server   8080   reencrypt     None
 ```
 
 
-## 5- Open a web browser and enter post service URL from step 2:
+## 6- Display content of the posturl variable, gatetoken object and postpath:
+$ echo $posturl
+``` bash
+https://oc-gate.apps.ocp4.xxx.xxx/login.html
+```
+$ oc describe gatetoken oc-gate-token -n oc-gate | grep Token: | awk '{print $2}'
+``` bash
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTU1OTYzMDQsIm1hdGNoTWV0aG9kIjoiR0VULE9QVElPTlMiLCJtYXRjaFBhdGgiOiIvazhzL2FwaXMvc3VicmVzb3VyY2VzLmt1YmV2aXJ0LmlvL3YxYWxwaGEzL25hbWVzcGFjZXMvb2NzLWNudi92aXJ0dWFsbWFjaGluZWluc3RhbmNlcy9yaGVsNi0xNTAub2NwNC5nb2xkbWFuLmxhYi92bmMiLCJuYmYiOjE2MTU1OTI3MDR9.TyfeVzu9RvY3iBs5VsDcP2q7Xhs8RZ1OHt1I5lBkA_p6Ul55ccdM0OPNsLdWDrEVMBv2EUnASwS4CnJnQkMDOhPhSVW1h-0Yh4nafhDq_pmIGxoz-t_7y98ou31gwjwI-5dRMX02t4h7NythpiYPvSnIqihB31J30dvgkeDohburW6xvucAKx2p9OXEE2sgOVrpkcTsmCFbMqCYYh6me8ay_FHH0Ncvpa2OYqi_i337QKn2-bQMRvpXzM6r0v4eWmveNB68sAnt_PyJO4NuJ3pvlYlmMeFYCqB7_2J0QyCe1C9GCj34Xsf6nLEwUAK6usCxLJjoH7XwXFPBWoHm9fA
+```
+$ echo $postpath
+``` bash
+/noVNC/vnc_lite.html?path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/ocs-cnv/virtualmachineinstances/rhel6-150.ocp4.xxx.xxx/vnc
+```
 ![Screenshot from 2021-03-08 13-12-17](https://user-images.githubusercontent.com/77073889/110363740-eb460a00-8010-11eb-8e7a-256a6c42302c.png)
 
 
