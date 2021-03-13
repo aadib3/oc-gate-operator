@@ -142,16 +142,19 @@ gatetoken.ocgate.yaacov.com/oc-gate-token created
 ```
 
 ## 5- View custom resources created in oc-gate project:
-$ oc get gateserver,gatetoken,svc,route -n oc-gate
+$ oc get gateserver,gatetoken,po,svc,route -n oc-gate
 ``` bash
 NAME                                          AGE
-gateserver.ocgate.yaacov.com/oc-gate-server   76m
+gateserver.ocgate.yaacov.com/oc-gate-server   3m2s
 
 NAME                                        AGE
-gatetoken.ocgate.yaacov.com/oc-gate-token   76m
+gatetoken.ocgate.yaacov.com/oc-gate-token   2m34s
 
-NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-service/oc-gate-server   ClusterIP   172.30.93.92   <none>        8080/TCP   76m
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/oc-gate-server-5b957497d6-2cqsq   1/1     Running   0          3m1s
+
+NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/oc-gate-server   ClusterIP   172.30.204.235   <none>        8080/TCP   3m2s
 
 NAME                                      HOST/PORT                       PATH   SERVICES         PORT   TERMINATION   WILDCARD
 route.route.openshift.io/oc-gate-server   oc-gate.apps.ocp4.xxx.xxx          oc-gate-server   8080   reencrypt     None
@@ -171,12 +174,7 @@ $ echo $postpath
 ``` bash
 /noVNC/vnc_lite.html?path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/ocs-cnv/virtualmachineinstances/rhel6-150.ocp4.xxx.xxx/vnc
 ```
-![Screenshot from 2021-03-08 13-12-17](https://user-images.githubusercontent.com/77073889/110363740-eb460a00-8010-11eb-8e7a-256a6c42302c.png)
 
-
-## 6- Enter token from step 3 in token field and the POST path from step 4 in the Then field, then click Submit:
+## 7- Goto to the posturl enter token value in token field and the postpath in the Then field, then click Submit:
 ![Screenshot from 2021-03-08 13-29-39](https://user-images.githubusercontent.com/77073889/110364968-6eb42b00-8012-11eb-92f0-cabe751ec733.png)
-
-
-## 7- Press enter a couple of times and you will have access to the console:
 ![Screenshot from 2021-03-08 13-32-08](https://user-images.githubusercontent.com/77073889/110365266-d4a0b280-8012-11eb-8a89-26bd1d58be21.png)
