@@ -4,5 +4,5 @@ metadata:
   name: oc-gate-server
   namespace: oc-gate
 spec:
-  image: ocgateimage
-  route: ocgateroute
+  image: quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
+  route: oc-gate.apps.ocp4.goldman.lab
