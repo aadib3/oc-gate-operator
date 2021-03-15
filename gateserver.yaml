@@ -1,8 +1,9 @@
 apiVersion: ocgate.yaacov.com/v1beta1
 kind: GateServer
 metadata:
-  name: oc-gate-server
+  name: gateserver
   namespace: oc-gate
 spec:
-  image: quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
-  route: oc-gate.apps.ocp4.goldman.lab
+  image: OCGATEIMAGE
+  web-app-image: OCGATEWEBIMAGE
+  route: OCGATEURL

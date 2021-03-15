@@ -9,7 +9,6 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    control-plane: controller-manager
   name: oc-gate
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -17,6 +16,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
   name: gateservers.ocgate.yaacov.com
 spec:
   group: ocgate.yaacov.com
@@ -65,7 +65,7 @@ spec:
                 pattern: ^(http|https)://.*
                 type: string
               image:
-                default: quay.io/yaacov/oc-gate
+                default: quay.io/yaacov/oc-gate:latest
                 description: image is the oc gate proxy image to use. Defalut value is "quay.io/yaacov/oc-gate:latest".
                 maxLength: 1024
                 type: string
@@ -77,6 +77,11 @@ spec:
                 description: route is the the gate proxy server.
                 maxLength: 226
                 pattern: ^([a-z0-9-_])+[.]([a-z0-9-_])+[.]([a-z0-9-._])+$
+                type: string
+              web-app-image:
+                default: ""
+                description: web-app-image is the oc gate proxy web application image to use, It's an image including the static web application to be served together with k8s API. The static web application should be in the directory "/data/web/public/" and it will be copied to the proxy servers "/web/public/" directory on pproxy startup. If left empty, the proxies default web application will not be replaced. Defalut value is "" (use default web application).
+                maxLength: 1024
                 type: string
             type: object
           status:
@@ -138,12 +143,19 @@ spec:
     storage: true
     subresources:
       status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
   name: gatetokens.ocgate.yaacov.com
 spec:
   group: ocgate.yaacov.com
@@ -290,6 +302,12 @@ spec:
     storage: true
     subresources:
       status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -322,6 +340,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  creationTimestamp: null
   name: oc-gate-operator-manager-role
 rules:
 - apiGroups:
@@ -368,6 +387,18 @@ rules:
   - apps
   resources:
   - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - oauth.openshift.io
+  resources:
+  - oauthclients
   verbs:
   - create
   - delete
@@ -433,6 +464,7 @@ rules:
   verbs:
   - create
   - delete
+  - deletecollection
   - get
   - list
   - patch
@@ -445,6 +477,7 @@ rules:
   verbs:
   - create
   - delete
+  - deletecollection
   - get
   - list
   - patch
@@ -627,7 +660,7 @@ spec:
         - --upstream=http://127.0.0.1:8080/
         - --logtostderr=true
         - --v=10
-        image: pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac-proxy:v0.5.0
+        image: KUBERBCPROXYIMAGE
         name: kube-rbac-proxy
         ports:
         - containerPort: 8443
@@ -638,7 +671,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: quay.io/yaacov/oc-gate-operator@sha256:aa4b164d92372011e3c644651220f889671b8b4affc4b90a1c21eb4b10c84b60
+        image: OCGATEOPERATORIMAGE
         livenessProbe:
           httpGet:
             path: /healthz
