@@ -173,7 +173,7 @@ $ consoleurl=${posturl}?token=${token}\\&then=$postpath
 
 $ echo $consoleurl
 ``` bash
-
+https://oc-gate.apps.ocp4.xxx.xxx/login.html?token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTU4MzA5NDQsIm1hdGNoTWV0aG9kIjoiR0VULE9QVElPTlMiLCJtYXRjaFBhdGgiOiJeL2s4cy9hcGlzL3N1YnJlc291cmNlcy5rdWJldmlydC5pby92MWFscGhhMy9uYW1lc3BhY2VzL29jcy1jbnYvdmlydHVhbG1hY2hpbmVpbnN0YW5jZXMvcmhlbDYtMTUwLm9jcDQuZ29sZG1hbi5sYWIvdm5jIiwibmJmIjoxNjE1ODI3MzQ0fQ.DXWHo5fLon-UEHpQn2D93PDR03RbFC7ANmiCwMiUeNmBhzu6mk03weDpc_irWFE5fWMUXR2dAZFpKodURiTnioCBKTHoWGX_9cneeQ-Bkqo5hhsYM4cvY4bD4EwweA_iSX6rdvyxPc50F3bgEmRLttNYBRaQyn_vTOunwxsyATnSb4ft4n9zSaSjSpaFvfVyyKFZLhf4P8ohVVve-DxpfRdVSWFK7j4xRWMLv6UqdOPTQ2g25uBpNrJM64YDQY26gWDmZGu3DprMtmxRFuCsaqrl7N1G8x_LNHx9wSc37e85zbCrnBv59Btb1wndq2bM5lT12SuFchtUwq5Hi3mNZg&then=/noVNC/vnc_lite.html?path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/ocs-cnv/virtualmachineinstances/rhel6-150.ocp4.xxx.xxx/vnc
 ```
 
 ## 5- Goto to the consoleurl:
