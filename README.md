@@ -74,6 +74,7 @@ $ ocgateimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate
 
 $ ocgatewebimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate-web-app-novnc
 
+$ ocgateroute=oc-gate.apps.ocp4.xxx.xxx
 
 ## 5- Inject the image variables into oc-gate-operator.yaml file and create oc-gate-operator objects:
 $ sed -i "s|KUBERBCPROXYIMAGE|$kuberbacproxyimage|g;s|OCGATEOPERATORIMAGE|$ocgateoperatorimage|g" oc-gate-operator.yaml
@@ -119,6 +120,7 @@ secret/oc-gate-jwt-secret created
 ```
 
 ## 8- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
+
 $ sed -i "s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g;s|OCGATEWEBIMAGE|$ocgatewebimage|g" gateserver.yaml
 
 $ oc create -f gateserver.yaml
@@ -130,7 +132,6 @@ gateserver.ocgate.yaacov.com/oc-gate-server created
 
 ## 1- Set the following variables required for creating the operator CRs:
 ``` bash
-$ ocgateroute=oc-gate.apps.ocp4.xxx.xxx
 $ vm=rhel6-150.ocp4.xxx.xxx 
 $ ns=ocs-cnv
 $ ocgatepath=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/$ns/virtualmachineinstances/$vm/vnc
