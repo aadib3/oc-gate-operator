@@ -177,4 +177,4 @@ https://oc-gate.apps.ocp4.xxx.xxx/login.html?token=eyJhbGciOiJSUzI1NiIsInR5cCI6I
 ```
 
 ## 5- Goto to the consoleurl:
-![Screenshot from 2021-03-08 13-32-08](https://user-images.githubusercontent.com/77073889/110365266-d4a0b280-8012-11eb-8a89-26bd1d58be21.png)
+![Screenshot from 2021-03-15 18-26-52](https://user-images.githubusercontent.com/77073889/111229439-47ce9980-85bc-11eb-9cb7-d0b6119c2497.png)
