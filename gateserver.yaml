@@ -6,4 +6,4 @@ metadata:
 spec:
   image: OCGATEIMAGE
   web-app-image: OCGATEWEBIMAGE
-  route: OCGATEURL
+  route: OCGATEROUTE

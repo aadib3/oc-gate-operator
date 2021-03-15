@@ -121,8 +121,7 @@ secret/oc-gate-jwt-secret created
 ```
 ## 2- Set the following variables required for creating the operator CRs:
 ``` bash
-$ ocgateimage=quay.io/yaacov/oc-gate@sha256:ff929ae9ea5610e9fba6914485d7486e11f6d793685631e73541447d6c25f98c
-$ ocgateroute="oc-gate.apps.ocp4.xxx.xxx"
+$ ocgateroute=oc-gate.apps.ocp4.xxx.xxx
 $ vm=rhel6-150.ocp4.xxx.xxx 
 $ ns=ocs-cnv
 $ ocgatepath=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/$ns/virtualmachineinstances/$vm/vnc
@@ -131,7 +130,7 @@ $ postpath=/noVNC/vnc_lite.html?path=$ocgatepath
 ```
 
 ## 3- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
-$ sed -i "s|ocgateimage|$ocgateimage|g;s|ocgateroute|$ocgateroute|g" gateserver.yaml
+$ sed -i "s|OCGATEWEBIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g" gateserver.yaml
 
 $ oc create -f gateserver.yaml
 ``` bash
