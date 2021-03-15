@@ -165,7 +165,7 @@ NAME                                      HOST/PORT                       PATH  
 route.route.openshift.io/oc-gate-server   oc-gate.apps.ocp4.xxx.xxx          oc-gate-server   8080   reencrypt     None
 ```
 
-## 4- Display content of the posturl variable, gatetoken object and postpath:
+## 4- Set and display the content of consoleurl:
 $ token=$(oc describe gatetoken $vm -n oc-gate | grep Token: | awk '{print $2}')
 
 $ consoleurl=${posturl}?token=${token}\\&then=$postpath
@@ -175,6 +175,5 @@ $ echo $consoleurl
 
 ```
 
-## 7- Goto to the posturl enter token value in token field and the postpath in the Then field, then click Submit:
-![Screenshot from 2021-03-08 13-29-39](https://user-images.githubusercontent.com/77073889/110364968-6eb42b00-8012-11eb-92f0-cabe751ec733.png)
+## 5- Goto to the consoleurl:
 ![Screenshot from 2021-03-08 13-32-08](https://user-images.githubusercontent.com/77073889/110365266-d4a0b280-8012-11eb-8a89-26bd1d58be21.png)
