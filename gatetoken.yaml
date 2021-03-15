@@ -5,4 +5,4 @@ metadata:
   namespace: oc-gate
 spec:
   image: OCGATEIMAGE
-  match-path: ^POSTPATH
+  match-path: ^OCGATEPOSTPATH

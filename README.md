@@ -112,14 +112,15 @@ NAME                                                            DESIRED   CURREN
 replicaset.apps/oc-gate-operator-controller-manager-566d6c44d   1         1         1       10m
 ```
 
-# Steps to authenticate access to a virtual machine noVNC console
-
-## 1- Create a new secret oc-gate-jwt-secret in the oc-gate project:
+## 7- Create a new secret oc-gate-jwt-secret in the oc-gate project:
 $ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-file=certs/key.pem -n oc-gate
 ``` bash
 secret/oc-gate-jwt-secret created
 ```
-## 2- Set the following variables required for creating the operator CRs:
+
+# Steps to authenticate access to a virtual machine noVNC console
+
+## 1- Set the following variables required for creating the operator CRs:
 ``` bash
 $ ocgateroute=oc-gate.apps.ocp4.xxx.xxx
 $ vm=rhel6-150.ocp4.xxx.xxx 
@@ -130,7 +131,7 @@ $ postpath=/noVNC/vnc_lite.html?path=$ocgatepath
 ```
 
 ## 3- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
-$ sed -i "s|OCGATEWEBIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g" gateserver.yaml
+$ sed -i "s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g;s|OCGATEWEBIMAGE|$ocgatewebimage|g" gateserver.yaml
 
 $ oc create -f gateserver.yaml
 ``` bash
@@ -138,7 +139,7 @@ gateserver.ocgate.yaacov.com/oc-gate-server created
 ```
 
 ## 4- Inject the ocgateimage and ocgatepath into gatetoken.yaml and create the GateToken custom resource:
-$ sed -i "s|ocgateimage|$ocgateimage|g;s|ocgatepath|$ocgatepath|g" gatetoken.yaml
+$ sed -i "s|VMNAME|$vm|g;s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEPOSTPATH|$ocgatepath|g" gatetoken.yaml
 
 $ oc create -f gatetoken.yaml
 ``` bash
@@ -166,17 +167,12 @@ route.route.openshift.io/oc-gate-server   oc-gate.apps.ocp4.xxx.xxx          oc-
 
 
 ## 6- Display content of the posturl variable, gatetoken object and postpath:
-$ echo $posturl
+$ token=$(oc describe gatetoken $vm -n oc-gate | grep Token: | awk '{print $2}')
+
+$ consoleurl=${posturl}?token=${token}\&then=$postpath
+
+$ echo $consoleurl
 ``` bash
-https://oc-gate.apps.ocp4.xxx.xxx/login.html
-```
-$ oc describe gatetoken oc-gate-token -n oc-gate | grep Token: | awk '{print $2}'
-``` bash
-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTU1OTYzMDQsIm1hdGNoTWV0aG9kIjoiR0VULE9QVElPTlMiLCJtYXRjaFBhdGgiOiIvazhzL2FwaXMvc3VicmVzb3VyY2VzLmt1YmV2aXJ0LmlvL3YxYWxwaGEzL25hbWVzcGFjZXMvb2NzLWNudi92aXJ0dWFsbWFjaGluZWluc3RhbmNlcy9yaGVsNi0xNTAub2NwNC5nb2xkbWFuLmxhYi92bmMiLCJuYmYiOjE2MTU1OTI3MDR9.TyfeVzu9RvY3iBs5VsDcP2q7Xhs8RZ1OHt1I5lBkA_p6Ul55ccdM0OPNsLdWDrEVMBv2EUnASwS4CnJnQkMDOhPhSVW1h-0Yh4nafhDq_pmIGxoz-t_7y98ou31gwjwI-5dRMX02t4h7NythpiYPvSnIqihB31J30dvgkeDohburW6xvucAKx2p9OXEE2sgOVrpkcTsmCFbMqCYYh6me8ay_FHH0Ncvpa2OYqi_i337QKn2-bQMRvpXzM6r0v4eWmveNB68sAnt_PyJO4NuJ3pvlYlmMeFYCqB7_2J0QyCe1C9GCj34Xsf6nLEwUAK6usCxLJjoH7XwXFPBWoHm9fA
-```
-$ echo $postpath
-``` bash
-/noVNC/vnc_lite.html?path=k8s/apis/subresources.kubevirt.io/v1alpha3/namespaces/ocs-cnv/virtualmachineinstances/rhel6-150.ocp4.xxx.xxx/vnc
 ```
 
 ## 7- Goto to the posturl enter token value in token field and the postpath in the Then field, then click Submit:
