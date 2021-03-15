@@ -118,6 +118,14 @@ $ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-
 secret/oc-gate-jwt-secret created
 ```
 
+## 8- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
+$ sed -i "s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g;s|OCGATEWEBIMAGE|$ocgatewebimage|g" gateserver.yaml
+
+$ oc create -f gateserver.yaml
+``` bash
+gateserver.ocgate.yaacov.com/oc-gate-server created
+```
+
 # Steps to authenticate access to a virtual machine noVNC console
 
 ## 1- Set the following variables required for creating the operator CRs:
@@ -130,15 +138,7 @@ $ posturl=https://$ocgateroute/login.html
 $ postpath=/noVNC/vnc_lite.html?path=$ocgatepath
 ```
 
-## 3- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
-$ sed -i "s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g;s|OCGATEWEBIMAGE|$ocgatewebimage|g" gateserver.yaml
-
-$ oc create -f gateserver.yaml
-``` bash
-gateserver.ocgate.yaacov.com/oc-gate-server created
-```
-
-## 4- Inject the ocgateimage and ocgatepath into gatetoken.yaml and create the GateToken custom resource:
+## 2- Inject the ocgateimage and ocgatepath into gatetoken.yaml and create the GateToken custom resource:
 $ sed -i "s|VMNAME|$vm|g;s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEPOSTPATH|$ocgatepath|g" gatetoken.yaml
 
 $ oc create -f gatetoken.yaml
@@ -146,7 +146,7 @@ $ oc create -f gatetoken.yaml
 gatetoken.ocgate.yaacov.com/oc-gate-token created
 ```
 
-## 5- View custom resources created in oc-gate project:
+## 3- View custom resources created in oc-gate project:
 $ oc get gateserver,gatetoken,po,svc,route -n oc-gate
 ``` bash
 NAME                                          AGE
@@ -165,14 +165,14 @@ NAME                                      HOST/PORT                       PATH  
 route.route.openshift.io/oc-gate-server   oc-gate.apps.ocp4.xxx.xxx          oc-gate-server   8080   reencrypt     None
 ```
 
-
-## 6- Display content of the posturl variable, gatetoken object and postpath:
+## 4- Display content of the posturl variable, gatetoken object and postpath:
 $ token=$(oc describe gatetoken $vm -n oc-gate | grep Token: | awk '{print $2}')
 
-$ consoleurl=${posturl}?token=${token}\&then=$postpath
+$ consoleurl=${posturl}?token=${token}\\&then=$postpath
 
 $ echo $consoleurl
 ``` bash
+
 ```
 
 ## 7- Goto to the posturl enter token value in token field and the postpath in the Then field, then click Submit:
