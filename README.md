@@ -113,13 +113,7 @@ NAME                                                            DESIRED   CURREN
 replicaset.apps/oc-gate-operator-controller-manager-566d6c44d   1         1         1       10m
 ```
 
-## 7- Create a new secret oc-gate-jwt-secret in the oc-gate project:
-$ oc create secret generic oc-gate-jwt-secret --from-file=certs/cert.pem --from-file=certs/key.pem -n oc-gate
-``` bash
-secret/oc-gate-jwt-secret created
-```
-
-## 8- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
+## 7- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
 
 $ sed -i "s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g;s|OCGATEWEBIMAGE|$ocgatewebimage|g" gateserver.yaml
 
