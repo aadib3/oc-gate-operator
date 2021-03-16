@@ -1,4 +1,4 @@
-# Steps to deploy oc-gate operator on OCP cluster
+# Steps to deploy oc-gate operator on OCP cluster (One Time Setup)
 
 ## 1- Clone oc-gate-operator git repository:
 ``` bash
@@ -128,7 +128,9 @@ $ oc create -f gateserver.yaml
 gateserver.ocgate.yaacov.com/oc-gate-server created
 ```
 
-# Steps to authenticate access to a virtual machine noVNC console
+
+
+# Steps to authenticate access to a virtual machine noVNC console (Everytime console access is required)
 
 ## 1- Set the following variables required for creating the operator CRs:
 ``` bash
