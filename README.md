@@ -18,7 +18,7 @@ $ kuberbacproxyimage=<private-repo-name:port>/kubebuilder/kube-rbac-proxy:v0.5.0
 
 $ ocgateoperatorimage=<private-repo-name:port>/yaacov/oc-gate-operator
 
-$ ocgateimage=<private-repo-name:port>/yaacov/oc-gate
+$ ocgateimage=\<private-repo-name:port\>/yaacov/oc-gate
 
 $ ocgatewebimage=<private-repo-name:port>/yaacov/oc-gate-web-app-novnc
 
