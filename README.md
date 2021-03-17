@@ -14,13 +14,13 @@ Resolving deltas: 100% (8/8), done.
 
 
 ## 2- Set the following variables with the appropriate image locations:
-$ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac-proxy:v0.5.0
+$ kuberbacproxyimage=<private-repo-name:port>/kubebuilder/kube-rbac-proxy:v0.5.0
 
-$ ocgateoperatorimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate-operator
+$ ocgateoperatorimage=<private-repo-name:port>/yaacov/oc-gate-operator
 
-$ ocgateimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate
+$ ocgateimage=<private-repo-name:port>/yaacov/oc-gate
 
-$ ocgatewebimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate-web-app-novnc
+$ ocgatewebimage=<private-repo-name:port>/yaacov/oc-gate-web-app-novnc
 
 $ ocgateroute=oc-gate.apps.ocp4.xxx.xxx
 
