@@ -61,6 +61,21 @@ service/oc-gate-operator-controller-manager-metrics-service created
 deployment.apps/oc-gate-operator-controller-manager created
 ```
 
+$ oc get all -n oc-gate-operator -l control-plane=controller-manager
+``` bash
+NAME                                                       READY   STATUS    RESTARTS   AGE
+pod/oc-gate-operator-controller-manager-7679c67885-vlvd8   2/2     Running   0          42m
+
+NAME                                                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/oc-gate-operator-controller-manager-metrics-service   ClusterIP   172.30.137.54   <none>        8443/TCP   42m
+
+NAME                                                  READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/oc-gate-operator-controller-manager   1/1     1            1           42m
+
+NAME                                                             DESIRED   CURRENT   READY   AGE
+replicaset.apps/oc-gate-operator-controller-manager-7679c67885   1         1         1       42m
+```
+
 
 ## 5- Inject the ocgateimage and ocgateroute variables into gateserver.yaml and create the GateServer custom resource:
 
@@ -69,4 +84,22 @@ $ sed -i "s|OCGATEIMAGE|$ocgateimage|g;s|OCGATEROUTE|$ocgateroute|g;s|OCGATEWEBI
 $ oc create -f gateserver.yaml
 ``` bash
 gateserver.ocgate.yaacov.com/oc-gate-server created
+```
+
+$ oc get gateserver,po,deployment,svc,route -n oc-gate
+``` bash
+NAME                                      AGE
+gateserver.ocgate.yaacov.com/gateserver   44m
+
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/gateserver-5cf46ccbfb-wchht   1/1     Running   0          43m
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/gateserver   1/1     1            1           43m
+
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/gateserver   ClusterIP   172.30.129.124   <none>        8080/TCP   44m
+
+NAME                                  HOST/PORT                       PATH   SERVICES     PORT   TERMINATION   WILDCARD
+route.route.openshift.io/gateserver   oc-gate.apps.ocp4.xxx.xxx          gateserver   8080   reencrypt     None
 ```
