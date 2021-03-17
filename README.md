@@ -51,7 +51,19 @@ cert.pem  key.pem
 $
 ```
 
-## 3- Login into OCP cluster to deploy oc-gate-operator:
+## 3- Set the following variables with the appropriate image locations:
+$ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac-proxy:v0.5.0
+
+$ ocgateoperatorimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate-operator
+
+$ ocgateimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate
+
+$ ocgatewebimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate-web-app-novnc
+
+$ ocgateroute=oc-gate.apps.ocp4.xxx.xxx
+
+
+## 4- Login into OCP cluster to deploy oc-gate-operator:
 $ oc login https://api.ocp4.xxx.xxx:6443
 ``` bash
 Authentication required for https://api.ocp4.xxx.xxx:6443 (openshift)
@@ -64,17 +76,6 @@ You have access to xx projects, the list has been suppressed. You can list all p
 Using project "default".
 $
 ```
-
-## 4- Set the following variables with the appropriate image locations:
-$ kuberbacproxyimage=pool6-infra1.practice.redhat.com:9446/kubebuilder/kube-rbac-proxy:v0.5.0
-
-$ ocgateoperatorimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate-operator
-
-$ ocgateimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate
-
-$ ocgatewebimage=pool6-infra1.practice.redhat.com:9446/yaacov/oc-gate-web-app-novnc
-
-$ ocgateroute=oc-gate.apps.ocp4.xxx.xxx
 
 ## 5- Inject the image variables into oc-gate-operator.yaml file and create oc-gate-operator objects:
 $ sed -i "s|KUBERBCPROXYIMAGE|$kuberbacproxyimage|g;s|OCGATEOPERATORIMAGE|$ocgateoperatorimage|g" oc-gate-operator.yaml
