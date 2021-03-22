@@ -473,6 +473,9 @@ subjects:
 - kind: ServiceAccount
   name: default
   namespace: oc-gate-operator
+- kind: ServiceAccount
+  name: vx-sa
+  namespace: oc-gate
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
