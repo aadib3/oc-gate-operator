@@ -341,64 +341,19 @@ metadata:
 rules:
 - apiGroups:
   - ""
+  - apps
+  - oauth.openshift.io
+  - ocgate.yaacov.com
+  - route.openshift.io
   resources:
   - secrets
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - serviceaccounts
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
   - services
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - '*'
-  resources:
-  - '*'
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - apps
-  resources:
   - deployments
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - oauth.openshift.io
-  resources:
   - oauthclients
+  - gateservers
+  - gatetokens
+  - routes
   verbs:
   - create
   - delete
@@ -408,50 +363,24 @@ rules:
   - update
   - watch
 - apiGroups:
-  - ocgate.yaacov.com
+  - '*'
   resources:
-  - gateservers
+  - '*'
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
 - apiGroups:
   - ocgate.yaacov.com
   resources:
   - gateservers/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - ocgate.yaacov.com
-  resources:
-  - gateservers/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - ocgate.yaacov.com
-  resources:
-  - gatetokens
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - watch
-- apiGroups:
-  - ocgate.yaacov.com
-  resources:
   - gatetokens/finalizers
   verbs:
   - update
 - apiGroups:
   - ocgate.yaacov.com
   resources:
+  - gateservers/status
   - gatetokens/status
   verbs:
   - get
@@ -461,18 +390,6 @@ rules:
   - rbac.authorization.k8s.io
   resources:
   - clusterrolebindings
-  verbs:
-  - create
-  - delete
-  - deletecollection
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
   - clusterroles
   verbs:
   - create
@@ -487,30 +404,7 @@ rules:
   - rbac.authorization.k8s.io
   resources:
   - rolebindings
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
   - roles
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - route.openshift.io
-  resources:
-  - routes
   verbs:
   - create
   - delete
@@ -534,16 +428,6 @@ rules:
   - securitycontextconstraints
   verbs:
   - use
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: oc-gate-operator-metrics-reader
-rules:
-- nonResourceURLs:
-  - /metrics
-  verbs:
-  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
